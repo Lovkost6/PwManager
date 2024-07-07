@@ -9,10 +9,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.WebStorage;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.security.PermitAll;
 import lombok.SneakyThrows;
-import lombok.extern.java.Log;
-import ru.lovkost.data.UserPw;
-import ru.lovkost.data.UserPwGrid;
+import ru.lovkost.data.entity.UserPw;
+import ru.lovkost.data.entity.UserPwGrid;
 import ru.lovkost.services.PasswordService;
 import ru.lovkost.services.PwManagerService;
 import ru.lovkost.services.SiteService;
@@ -24,6 +24,7 @@ import java.util.List;
 @PageTitle("List")
 @Route(value = "pws", layout = MainLayout.class)
 @Uses(Icon.class)
+@PermitAll
 public class ListView extends Composite<VerticalLayout> {
 
     private final PwManagerService service;

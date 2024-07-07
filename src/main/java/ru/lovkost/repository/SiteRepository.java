@@ -1,6 +1,7 @@
-package ru.lovkost.data;
+package ru.lovkost.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import ru.lovkost.data.entity.Site;
 
 import javax.annotation.Nullable;
 

@@ -4,7 +4,6 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.WebStorage;
@@ -13,8 +12,9 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
+import jakarta.annotation.security.PermitAll;
 import lombok.SneakyThrows;
-import ru.lovkost.data.Site;
+import ru.lovkost.data.entity.Site;
 import ru.lovkost.services.NotificationService;
 import ru.lovkost.services.PasswordService;
 import ru.lovkost.services.PwManagerService;
@@ -25,6 +25,7 @@ import ru.lovkost.views.MainLayout;
 @PageTitle("Create")
 @Route(value = "create", layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
+@PermitAll
 public class CreateView extends Composite<VerticalLayout> {
 
     private final PwManagerService service;
@@ -34,9 +35,7 @@ public class CreateView extends Composite<VerticalLayout> {
     public CreateView(PwManagerService service, SiteService siteService) {
         this.service = service;
         this.siteService = siteService;
-        WebStorage.getItem( "key", value -> {
-            key = value;
-        });
+        WebStorage.getItem( "key", value -> key = value);
         TextField login = new TextField("Login");
         PasswordField password = new PasswordField("Password");
         TextField url = new TextField("Site url");
@@ -61,7 +60,6 @@ public class CreateView extends Composite<VerticalLayout> {
         formLayout.setWidth("30%");
         formLayout.add(login, password, password, url,
                 ttlField,save);
-        ;
         formLayout.setResponsiveSteps(
                 new FormLayout.ResponsiveStep("0", 1));
         getContent().add(formLayout);

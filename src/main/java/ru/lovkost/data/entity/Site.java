@@ -1,4 +1,4 @@
-package ru.lovkost.data;
+package ru.lovkost.data.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

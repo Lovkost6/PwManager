@@ -2,12 +2,11 @@ package ru.lovkost.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.lovkost.data.PwManagerRepository;
-import ru.lovkost.data.Site;
-import ru.lovkost.data.UserPw;
+import ru.lovkost.repository.PwManagerRepository;
+import ru.lovkost.data.entity.Site;
+import ru.lovkost.data.entity.UserPw;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Service

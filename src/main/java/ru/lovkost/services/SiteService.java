@@ -3,8 +3,8 @@ package ru.lovkost.services;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
-import ru.lovkost.data.Site;
-import ru.lovkost.data.SiteRepository;
+import ru.lovkost.data.entity.Site;
+import ru.lovkost.repository.SiteRepository;
 
 import java.net.URI;
 import java.util.List;

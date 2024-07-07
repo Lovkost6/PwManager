@@ -16,6 +16,8 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.auth.AnonymousAllowed;
+import jakarta.annotation.security.PermitAll;
 import ru.lovkost.services.PasswordService;
 import ru.lovkost.views.MainLayout;
 
@@ -23,6 +25,7 @@ import java.security.NoSuchAlgorithmException;
 
 @PageTitle("Settings")
 @Route(value = "settings", layout = MainLayout.class)
+@PermitAll
 public class Settings extends Composite<VerticalLayout> {
     public Settings() {
         TextField key = new TextField("Key");
