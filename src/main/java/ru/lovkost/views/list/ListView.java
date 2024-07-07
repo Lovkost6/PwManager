@@ -32,16 +32,14 @@ public class ListView extends Composite<VerticalLayout> {
 
     private final PwManagerService servicePws;
     private final SiteService serviceSite;
-    private AuthenticatedUser authenticatedUser;
+    private final AuthenticatedUser authenticatedUser;
     private String key;
 
     public ListView(PwManagerService service, SiteService serviceSite, AuthenticatedUser authenticatedUser) {
         this.servicePws = service;
         this.serviceSite = serviceSite;
         this.authenticatedUser = authenticatedUser;
-        WebStorage.getItem("key", value -> {
-            key = value;
-        });
+        WebStorage.getItem("key", value -> key = value);
         Accordion accordion = new Accordion();
         getContent().setWidth("100%");
         getContent().getStyle().set("flex-grow", "1");

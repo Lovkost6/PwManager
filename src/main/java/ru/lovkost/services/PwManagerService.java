@@ -2,25 +2,20 @@ package ru.lovkost.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.lovkost.data.entity.User;
-import ru.lovkost.repository.PwManagerRepository;
 import ru.lovkost.data.entity.Site;
+import ru.lovkost.data.entity.User;
 import ru.lovkost.data.entity.UserPw;
+import ru.lovkost.repository.PwManagerRepository;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class PwManagerService {
     private final PwManagerRepository repository;
 
-
-    public List<UserPw> findALl() {
-        return repository.findAll();
-    }
 
     public List<UserPw> findBySiteId(Site site) {
         return repository.findUserPwBySite(site);
@@ -30,10 +25,6 @@ public class PwManagerService {
         var currentUserPws = repository.findUserPwByOwner(user);
         var sites = new HashSet<>(currentUserPws.stream().map(UserPw::getSite).toList());
         return sites.stream().toList();
-    }
-
-    public void createPw(UserPw userPw) {
-        repository.save(userPw);
     }
 
     public void createPw(User user, String login, String password, Site site, String ttl) {

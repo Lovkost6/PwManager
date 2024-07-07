@@ -36,7 +36,7 @@ public class CreateView extends Composite<VerticalLayout> {
 
     private final PwManagerService service;
     private final SiteService siteService;
-    private AuthenticatedUser authenticatedUser;
+    private final AuthenticatedUser authenticatedUser;
     private String key;
 
     public CreateView(PwManagerService service, SiteService siteService, AuthenticatedUser authenticatedUser) {
