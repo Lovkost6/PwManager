@@ -1,9 +1,11 @@
 package ru.lovkost.views.create;
 
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.WebStorage;
@@ -15,11 +17,15 @@ import com.vaadin.flow.router.RouteAlias;
 import jakarta.annotation.security.PermitAll;
 import lombok.SneakyThrows;
 import ru.lovkost.data.entity.Site;
+import ru.lovkost.data.entity.User;
+import ru.lovkost.security.AuthenticatedUser;
 import ru.lovkost.services.NotificationService;
 import ru.lovkost.services.PasswordService;
 import ru.lovkost.services.PwManagerService;
 import ru.lovkost.services.SiteService;
 import ru.lovkost.views.MainLayout;
+
+import java.util.Optional;
 
 
 @PageTitle("Create")
@@ -30,11 +36,13 @@ public class CreateView extends Composite<VerticalLayout> {
 
     private final PwManagerService service;
     private final SiteService siteService;
+    private AuthenticatedUser authenticatedUser;
     private String key;
 
-    public CreateView(PwManagerService service, SiteService siteService) {
+    public CreateView(PwManagerService service, SiteService siteService, AuthenticatedUser authenticatedUser) {
         this.service = service;
         this.siteService = siteService;
+        this.authenticatedUser = authenticatedUser;
         WebStorage.getItem( "key", value -> key = value);
         TextField login = new TextField("Login");
         PasswordField password = new PasswordField("Password");
@@ -52,7 +60,10 @@ public class CreateView extends Composite<VerticalLayout> {
                 NotificationService.show("Нет ключа", NotificationVariant.LUMO_ERROR);
                 return;
             }
-            service.createPw(encrypt(login.getValue()),encrypt(password.getValue()),site,ttlField.getValue());
+            var user = getCurrentUser();
+            service.createPw(user,encrypt(login.getValue()),encrypt(password.getValue()),site,ttlField.getValue());
+            UI.getCurrent().refreshCurrentRoute(true);
+            Notification.show("Успешно").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
         });
 
         ttlField.setItems( "1 день", "1 неделя", "1 месяц","6 месяцев","1 год","2 года","Без ограничений");
@@ -63,6 +74,11 @@ public class CreateView extends Composite<VerticalLayout> {
         formLayout.setResponsiveSteps(
                 new FormLayout.ResponsiveStep("0", 1));
         getContent().add(formLayout);
+    }
+
+    private User getCurrentUser() {
+        Optional<User> currentUser = authenticatedUser.get();
+        return currentUser.get();
     }
 
 

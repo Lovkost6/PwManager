@@ -1,5 +1,6 @@
 package ru.lovkost.security;
 
+import com.vaadin.flow.component.page.WebStorage;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -41,6 +42,7 @@ public class AuthenticatedUser {
 
     public void logout() {
         authenticationContext.logout();
+        WebStorage.removeItem("key");
     }
 
 

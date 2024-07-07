@@ -6,6 +6,7 @@ import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.page.WebStorage;
 import com.vaadin.flow.router.*;
 import ru.lovkost.views.signup.RegistrationView;
 
@@ -15,8 +16,8 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
 
 
     public LoginView() {
+        WebStorage.removeItem("key");
         setAction("login");
-
         LoginI18n i18n = LoginI18n.createDefault();
         RouterLink registration = new RouterLink("Registration", RegistrationView.class);
         i18n.setHeader(new LoginI18n.Header());

@@ -11,14 +11,17 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import lombok.SneakyThrows;
+import ru.lovkost.data.entity.User;
 import ru.lovkost.data.entity.UserPw;
 import ru.lovkost.data.entity.UserPwGrid;
+import ru.lovkost.security.AuthenticatedUser;
 import ru.lovkost.services.PasswordService;
 import ru.lovkost.services.PwManagerService;
 import ru.lovkost.services.SiteService;
 import ru.lovkost.views.MainLayout;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @PageTitle("List")
@@ -27,12 +30,15 @@ import java.util.List;
 @PermitAll
 public class ListView extends Composite<VerticalLayout> {
 
-    private final PwManagerService service;
+    private final PwManagerService servicePws;
     private final SiteService serviceSite;
+    private AuthenticatedUser authenticatedUser;
     private String key;
-    public ListView(PwManagerService service, SiteService serviceSite) {
-        this.service = service;
+
+    public ListView(PwManagerService service, SiteService serviceSite, AuthenticatedUser authenticatedUser) {
+        this.servicePws = service;
         this.serviceSite = serviceSite;
+        this.authenticatedUser = authenticatedUser;
         WebStorage.getItem("key", value -> {
             key = value;
         });
@@ -41,14 +47,17 @@ public class ListView extends Composite<VerticalLayout> {
         getContent().getStyle().set("flex-grow", "1");
         accordion.setWidth("100%");
         setAccordionSampleData(accordion);
+        accordion.close();
         getContent().add(accordion);
     }
 
     private void setAccordionSampleData(Accordion accordion) {
 
-        var allSites = serviceSite.getSites();
+        Optional<User> maybeUser = authenticatedUser.get();
+        var user = maybeUser.get();
+        var allSitesIdByUser = servicePws.findSiteByUser(user);
 
-        for (var site : allSites) {
+        for (var site : allSitesIdByUser) {
             accordion.add(site.getUrl(),new Grid<>(UserPw.class));
         }
         accordion.addOpenedChangeListener(openedChangeEvent -> {
@@ -57,7 +66,7 @@ public class ListView extends Composite<VerticalLayout> {
                 var openedPanel = openedChangeEvent.getOpenedPanel();
                 String panelName = openedPanel.get().getSummaryText();
             var site = serviceSite.findSiteByUrl(panelName);
-            var pws = service.findBySiteId(site);
+            var pws = servicePws.findBySiteId(site);
             var showPws = decryptUserPwIfKeyExists(pws);
             usersPwByOpenAccrod.setItems(showPws);
             openedChangeEvent.getOpenedPanel().get().removeAll();

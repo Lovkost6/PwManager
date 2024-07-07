@@ -19,8 +19,12 @@ public class UserPw {
     @NonNull
     private String password;
     @NonNull
+
     @ManyToOne
     private Site site;
     private LocalDate ttl;
+
+    @ManyToOne
+    private User owner;
 
 }
